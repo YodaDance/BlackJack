@@ -18,7 +18,7 @@ while True:
     Test.win_bust_check(player, dealer)
     break
 
-
+#lublu mamu
 
 print(player.hand)
 print(dealer.hand)
