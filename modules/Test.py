@@ -8,7 +8,11 @@ class Player():
         self.hand = hand
 
     def hand_score(self):
-        sumhand = sum(self.hand)
+        sumhand = 0
+        for card in self.hand:
+            card = Card(card)
+            card = card.card_nominal()
+            sumhand += card
         return sumhand
 
     def betting(self):
@@ -20,34 +24,50 @@ class Player():
                 print('Your bet is out of bank')
             return self.bank
 
+    def print_card(self,card):
+        print(f"You have got {card}")
+
     def get_card(self, card):
         return self.hand.append(card)
 
     def stand_or_hit(self, deck):
         while True:
             try:
-                choice = input('Would you like to stand or hit (answer "stand" or "hit"):  ')
+                choice = input('Would you like to stand or hit (answer "stand" or "hit"): ')
                 if choice.lower() == 'hit':
-                    self.get_card(Card(deck.take_card()))
+                    self.print_card(card_turn)
+                    card_turn = Card(deck.take_card())
+                    card_turn = card_turn.card_nominal()
+                    self.get_card(card_turn)
+                    print(self.hand_score())
                     if self.hand_score() > 21:
                         return self.hand
                     else:
                         continue
                 elif choice.lower() == 'stand':
+                    print(self.hand_score())
                     return self.hand
-            except:
-                print('Something is wrong!')
-                continue
-
+                else:
+                    print('Error!')
+                    continue
+            except TypeError:
+                print('Ace is on the table')
 
 class Card():
     nominal = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'jack': 10, 'quenn': 10,
                'king': 10, 'ace': (1, 11)}
 
     def __init__(self, card):
-        self.card = Card.nominal[card.split()[0].lower()]
+        self.card = card
 
+    def __str__(self):
+        self.card = str(self.card)
+        return self.card
 
+    def card_nominal(self):
+        self.card = Card.nominal[self.__str__().split()[0].lower()]
+        self.card = int(self.card)
+        return self.card
 
 
 class Deck():
@@ -67,7 +87,6 @@ class Deck():
 
     def take_card(self):
         card = self.deck[0]
-        print(f'You have taken {card}')
         self.deck.pop(0)
         return card
 

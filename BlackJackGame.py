@@ -1,4 +1,5 @@
-from BlackJack.modules import Test
+from modules import Test
+
 deck = Test.Deck()
 dealer = Test.Player()
 player = Test.Player()
@@ -12,19 +13,14 @@ while True:
     for i in range(2):
         card = Test.Card(deck.take_card())
         player.get_card(card)
+        player.print_card(card)
         card = Test.Card(deck.take_card())
         dealer.get_card(card)
     player.stand_or_hit(deck)
     Test.win_bust_check(player, dealer)
     break
 
-#lublu mamu
+# lublu mamu
 
 print(player.hand)
 print(dealer.hand)
-
-
-
-
-
-
