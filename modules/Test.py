@@ -3,9 +3,10 @@ import random
 
 class Player():
 
-    def __init__(self, bank=1000, hand=list()):
+    def __init__(self, bank=1000, hand=list(), bet=1):
         self.bank = int(bank)
         self.hand = list(hand)
+        self.bet = int(bet)
 
     def hand_score(self):
         sumhand = 0
@@ -16,10 +17,10 @@ class Player():
         return sumhand
 
     def betting(self):
-        bet = int(input('Choose the bet, please: '))
+        self.bet = int(input('Choose the bet, please: '))
         while True:
-            if self.bank > bet:
-                self.bank -= bet
+            if self.bank > self.bet:
+                self.bank -= self.bet
             else:
                 print('Your bet is out of bank')
             return self.bank
@@ -103,4 +104,4 @@ def win_bust_check(player, dealer):
 
 
 def replay():
-    return input('You wanna play again? Yes or No.').lower().startswith('y')
+    return input('You wanna play again? Yes or No: ').lower().startswith('y')
