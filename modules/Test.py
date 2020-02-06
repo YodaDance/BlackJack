@@ -4,8 +4,8 @@ import random
 class Player():
 
     def __init__(self, bank=1000, hand=list()):
-        self.bank = bank
-        self.hand = hand
+        self.bank = int(bank)
+        self.hand = list(hand)
 
     def hand_score(self):
         sumhand = 0
@@ -35,8 +35,8 @@ class Player():
             try:
                 choice = input('Would you like to stand or hit (answer "stand" or "hit"): ')
                 if choice.lower() == 'hit':
-                    self.print_card(card_turn)
                     card_turn = Card(deck.take_card())
+                    self.print_card(card_turn)
                     card_turn = card_turn.card_nominal()
                     self.get_card(card_turn)
                     print(self.hand_score())
