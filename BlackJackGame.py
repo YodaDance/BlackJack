@@ -7,6 +7,7 @@ game_on = True
 
 
 while game_on:
+    player.ask_name()
     deck.deck_creation()
     while True:
         player.betting()
@@ -19,8 +20,6 @@ while game_on:
             card = card.card_nominal()
             dealer.get_card(card)
         player.stand_or_hit(deck)
-        print(f'You hand is {player.hand}')
-        print(f'Dealer hand is {dealer.hand}')
         Test.win_bust_check(player, dealer)
         player.hand = list()
         dealer.hand = list()

@@ -3,10 +3,15 @@ import random
 
 class Player():
 
-    def __init__(self, bank=1000, hand=list(), bet=1):
+    def __init__(self, name='Dealer', bank=1000, hand=list(), bet=1):
+        self.name = str(name)
         self.bank = int(bank)
         self.hand = list(hand)
         self.bet = int(bet)
+
+    def ask_name(self):
+        self.name = input('What is your name?')
+        return self.name
 
     def hand_score(self):
         sumhand = 0
@@ -25,8 +30,8 @@ class Player():
                 print('Your bet is out of bank')
             return self.bank
 
-    def print_card(self,card):
-        print(f"You have got {card}")
+    def print_card(self, card):
+        print(f"{self.name} have got {card}")
 
     def get_card(self, card):
         return self.hand.append(card)
@@ -53,6 +58,7 @@ class Player():
                     continue
             except TypeError:
                 print('Ace is on the table')
+                self.
 
 class Card():
     nominal = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'jack': 10, 'quenn': 10,
@@ -66,9 +72,8 @@ class Card():
         return self.card
 
     def card_nominal(self):
-        self.card = Card.nominal[self.__str__().split()[0].lower()]
-        self.card = int(self.card)
-        return self.card
+        nominal = int(Card.nominal[self.__str__().split()[0].lower()])
+        return nominal
 
 
 class Deck():
