@@ -14,12 +14,23 @@ class Player():
         return self.name
 
     def hand_score(self):
-        sumhand = 0
-        for card in self.hand:
-            card = Card(card)
-            card = card.card_nominal()
-            sumhand += card
-        return sumhand
+        if (1,11) in self.hand:
+            self.hand.remove((1,11))
+            sumhand = sum(self.hand)
+            if (sumhand+11)<=21:
+                return (sumhand+11)
+            else:
+                return (sumhand+1)
+        else:
+            sumhand = sum(self.hand)
+            return sumhand
+
+        # sumhand = 0
+        # for card in self.hand:
+        #     card = Card(card)
+        #     card = card.card_nominal()
+        #     sumhand += card
+        # return sumhand
 
     def betting(self):
         self.bet = int(input('Choose the bet, please: '))
@@ -41,12 +52,12 @@ class Player():
             try:
                 choice = input('Would you like to stand or hit (answer "stand" or "hit"): ')
                 if choice.lower() == 'hit':
-                    card_turn = Card(deck.take_card())
-                    self.print_card(card_turn)
-                    card_turn = card_turn.card_nominal()
-                    self.get_card(card_turn)
+                    card = Card(deck.take_card())
+                    self.print_card(card)
+                    card = card.card_nominal()
+                    self.get_card(card)
                     print(self.hand_score())
-                    if self.hand_score() > 21:
+                    if self.hand_score() >= 21:
                         return self.hand
                     else:
                         continue
@@ -73,7 +84,6 @@ class Card():
 
     def card_nominal(self):
         card = Card.nominal[self.__str__().split()[0].lower()]
-        card = int(card)
         return card
 
 

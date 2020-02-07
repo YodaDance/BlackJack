@@ -13,9 +13,9 @@ while game_on:
         player.betting()
         for i in range(2):
             card = Test.Card(deck.take_card())
+            player.print_card(card)
             card = card.card_nominal()
             player.get_card(card)
-            player.print_card(card)
             card = Test.Card(deck.take_card())
             card = card.card_nominal()
             dealer.get_card(card)
