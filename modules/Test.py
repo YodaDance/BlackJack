@@ -18,19 +18,14 @@ class Player():
             self.hand.remove((1,11))
             sumhand = sum(self.hand)
             if (sumhand+11)<=21:
+                self.hand.append((1,11))
                 return (sumhand+11)
             else:
+                self.hand.append((1,11))
                 return (sumhand+1)
         else:
             sumhand = sum(self.hand)
             return sumhand
-
-        # sumhand = 0
-        # for card in self.hand:
-        #     card = Card(card)
-        #     card = card.card_nominal()
-        #     sumhand += card
-        # return sumhand
 
     def betting(self):
         self.bet = int(input('Choose the bet, please: '))
@@ -49,7 +44,6 @@ class Player():
 
     def stand_or_hit(self, deck):
         while True:
-            try:
                 choice = input('Would you like to stand or hit (answer "stand" or "hit"): ')
                 if choice.lower() == 'hit':
                     card = Card(deck.take_card())
@@ -67,11 +61,10 @@ class Player():
                 else:
                     print('Error!')
                     continue
-            except TypeError:
-                print('Ace is on the table')
-                continue
 
-class Card():
+
+
+class Card:
     nominal = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'jack': 10, 'quenn': 10,
                'king': 10, 'ace': (1, 11)}
 
@@ -87,7 +80,7 @@ class Card():
         return card
 
 
-class Deck():
+class Deck:
     values = [str(i) for i in range(2, 11)] + ['Jack', 'Quenn', 'King', 'Ace']
     suits = ['clubs', 'diamonds', 'hearts', 'spaces']
 

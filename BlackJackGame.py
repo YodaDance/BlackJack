@@ -22,6 +22,7 @@ while game_on:
         player.stand_or_hit(deck)
         Test.win_bust_check(player, dealer, deck)
         print(f"Dealer's hand is {dealer.hand}")
+        print(dealer.hand_score())
         player.hand = list()
         dealer.hand = list()
         print(f"{player.name}'s bank is {player.bank}")
