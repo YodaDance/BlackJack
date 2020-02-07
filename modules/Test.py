@@ -10,7 +10,7 @@ class Player():
         self.bet = int(bet)
 
     def ask_name(self):
-        self.name = input('What is your name?')
+        self.name = input('What is your name? ')
         return self.name
 
     def hand_score(self):
@@ -58,7 +58,7 @@ class Player():
                     continue
             except TypeError:
                 print('Ace is on the table')
-                self.
+                continue
 
 class Card():
     nominal = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'jack': 10, 'quenn': 10,
@@ -72,8 +72,9 @@ class Card():
         return self.card
 
     def card_nominal(self):
-        nominal = int(Card.nominal[self.__str__().split()[0].lower()])
-        return nominal
+        card = Card.nominal[self.__str__().split()[0].lower()]
+        card = int(card)
+        return card
 
 
 class Deck():
@@ -97,7 +98,16 @@ class Deck():
         return card
 
 
-def win_bust_check(player, dealer):
+def win_bust_check(player, dealer, deck):
+    while dealer.hand_score() <= 16:
+        card = Card(deck.take_card())
+        card = card.card_nominal()
+        dealer.get_card(card)
+        print(dealer.hand)
+    if player.hand_score() == 21:
+        print('BlackJack!')
+        player.bank += player.bet * 2
+        return player.bank
     if player.hand_score() > 21:
         print('Busted!')
     elif 21 > player.hand_score() > dealer.hand_score():
@@ -110,3 +120,4 @@ def win_bust_check(player, dealer):
 
 def replay():
     return input('You wanna play again? Yes or No: ').lower().startswith('y')
+

@@ -20,10 +20,13 @@ while game_on:
             card = card.card_nominal()
             dealer.get_card(card)
         player.stand_or_hit(deck)
-        Test.win_bust_check(player, dealer)
+        Test.win_bust_check(player, dealer, deck)
+        print(f"Dealer's hand is {dealer.hand}")
         player.hand = list()
         dealer.hand = list()
-        print(f'You bank is {player.bank}')
+        print(f"{player.name}'s bank is {player.bank}")
         if not Test.replay():
             break
+    print('Thanks for you time! See ya!')
+    break
 
