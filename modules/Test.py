@@ -1,72 +1,81 @@
 import random
 
 
-class Player():
+class Player:
 
-    def __init__(self, name='Dealer', bank=1000, hand=list(), bet=1):
+    def __init__(self, name='Dealer', bank=1000, hand=list(), bet=1, nominal=list(), aces=0, sumhand=0):
         self.name = str(name)
         self.bank = int(bank)
         self.hand = list(hand)
         self.bet = int(bet)
+        self.nominal = list(nominal)
+        self.aces = int(aces)
+        self.sumhand = int(sumhand)
 
     def ask_name(self):
         self.name = input('What is your name? ')
         return self.name
 
-    def hand_score(self):
-        if (1,11) in self.hand:
-            self.hand.remove((1,11))
-            sumhand = sum(self.hand)
-            if (sumhand+11)<=21:
-                self.hand.append((1,11))
-                return (sumhand+11)
-            else:
-                self.hand.append((1,11))
-                return (sumhand+1)
-        else:
-            sumhand = sum(self.hand)
-            return sumhand
-
     def betting(self):
-        self.bet = int(input('Choose the bet, please: '))
         while True:
-            if self.bank > self.bet:
-                self.bank -= self.bet
-            else:
-                print('Your bet is out of bank')
-            return self.bank
+            try:
+                self.bet = int(input('Choose the bet, please: '))
+                if self.bank >= self.bet:
+                    self.bank -= self.bet
+                    return self.bank
+                else:
+                    print('Your bet is out of bank')
+                    continue
+            except ValueError:
+                print('You tapped not a number')
 
     def print_card(self, card):
         print(f"{self.name} have got {card}")
 
-    def get_card(self, card):
-        return self.hand.append(card)
+    def get_card(self, card, card_nominal):
+        self.sumhand = 0
+        self.hand.append(card)
+        self.nominal.append(card_nominal)
+        for numb in self.nominal:
+            self.sumhand += numb
+            if numb == 11:
+                self.aces += 1
+                self.adjust_for_ace()
+        return self.hand
+
+    def adjust_for_ace(self):
+        while self.sumhand > 21 and self.aces:
+            self.sumhand -= 10
+            self.aces -= 1
 
     def stand_or_hit(self, deck):
         while True:
-                choice = input('Would you like to stand or hit (answer "stand" or "hit"): ')
-                if choice.lower() == 'hit':
-                    card = Card(deck.take_card())
-                    self.print_card(card)
-                    card = card.card_nominal()
-                    self.get_card(card)
-                    print(self.hand_score())
-                    if self.hand_score() >= 21:
-                        return self.hand
-                    else:
-                        continue
-                elif choice.lower() == 'stand':
-                    print(self.hand_score())
+            choice = input('Would you like to stand or hit (answer "stand" or "hit"): ')
+            if choice.lower() == 'hit':
+                card = Card(deck.take_card())
+                self.print_card(card)
+                self.get_card(card, card.card_nominal())
+                print(f"{self.name}'s hand value is {self.sumhand}")
+                if self.sumhand >= 21:
                     return self.hand
                 else:
-                    print('Error!')
                     continue
+            elif choice.lower() == 'stand':
+                print(f"{self.name}'s hand value is {self.sumhand}")
+                return self.hand
+            else:
+                print('Error!')
+                continue
 
+    def hide_card(self):
+        print(f"{self.name}'s hand is:")
+        print('card hidden')
+        print(f"{self.hand[1]}")
 
 
 class Card:
     nominal = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'jack': 10, 'quenn': 10,
-               'king': 10, 'ace': (1, 11)}
+               'king': 10, 'ace': 11}
 
     def __init__(self, card):
         self.card = card
@@ -76,8 +85,9 @@ class Card:
         return self.card
 
     def card_nominal(self):
-        card = Card.nominal[self.__str__().split()[0].lower()]
-        return card
+        card_nominal = Card.nominal[self.__str__().split()[0].lower()]
+        card_nominal = int(card_nominal)
+        return card_nominal
 
 
 class Deck:
@@ -91,7 +101,7 @@ class Deck:
     def deck_creation(self):
         for val in Deck.values:
             for suit in Deck.suits:
-                self.deck.append(val + ' ' + suit)
+                self.deck.append(val + ' of ' + suit)
         random.shuffle(self.deck)
         return self.deck
 
@@ -102,18 +112,16 @@ class Deck:
 
 
 def win_bust_check(player, dealer, deck):
-    while dealer.hand_score() <= 16:
+    while dealer.sumhand <= 16:
         card = Card(deck.take_card())
-        card = card.card_nominal()
-        dealer.get_card(card)
-        print(dealer.hand)
-    if player.hand_score() == 21:
+        dealer.get_card(card, card.card_nominal())
+    if player.sumhand == 21:
         print('BlackJack!')
         player.bank += player.bet * 2
         return player.bank
-    if player.hand_score() > 21:
+    if player.sumhand > 21:
         print('Busted!')
-    elif 21 > player.hand_score() > dealer.hand_score():
+    elif 21 > player.sumhand > dealer.sumhand or dealer.sumhand > 21:
         print('You have won!')
         player.bank += player.bet * 2
         return player.bank
@@ -123,4 +131,3 @@ def win_bust_check(player, dealer, deck):
 
 def replay():
     return input('You wanna play again? Yes or No: ').lower().startswith('y')
-
